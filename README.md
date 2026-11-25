@@ -211,5 +211,3 @@ pip install torch torchvision timm scikit-learn pandas numpy opencv-python matpl
 * **Data Hygiene:** Exact `MD5` deduplication ($12,446 \rightarrow 11,929$ slices) followed by perceptual/geometric pseudo-patient clustering ($427$ studies) and 5-fold `StratifiedGroupKFold`.
 
 ```
-
-```
