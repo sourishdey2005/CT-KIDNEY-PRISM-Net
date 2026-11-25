@@ -12,6 +12,31 @@ Unlike conventional 2D CT classifiers that suffer from severe **volumetric slice
 
 ---
 
+
+<img width="1600" height="838" alt="fig1_leakage_audit" src="https://github.com/user-attachments/assets/50ec78ae-7cf1-4073-acca-5663ea3508bd" />
+<img width="3873" height="2676" alt="fig1_raw_eda_statistics" src="https://github.com/user-attachments/assets/dcc1ab8d-eee2-47f1-b760-b24ebe645151" />
+<img width="3270" height="3348" alt="fig2_raw_ct_samples" src="https://github.com/user-attachments/assets/9ec0de9e-6617-4a24-a6b5-3c4ece8dc9c7" />
+<img width="2826" height="1291" alt="fig3_ablation_trajectory" src="https://github.com/user-attachments/assets/2eee8a1b-fc9e-4fdf-ae9d-c61185cd19b1" />
+<img width="3721" height="1324" alt="fig2_sota_benchmark" src="https://github.com/user-attachments/assets/6bffb622-66e4-493d-8a30-b82d2a998759" />
+<img width="3570" height="1354" alt="fig6_roc_pr_curves" src="https://github.com/user-attachments/assets/aae31e31-e5ee-4622-b340-b0bb90ccc3e0" />
+<img width="4753" height="1414" alt="fig4_prism_evaluation_dashboard" src="https://github.com/user-attachments/assets/c2de9bd5-9835-47b8-a7f0-b910607363dd" />
+<img width="3466" height="1355" alt="fig4_calibration_confusion" src="https://github.com/user-attachments/assets/16b6bee4-76d1-4416-b850-1cc1f73edcce" />
+<img width="3247" height="3348" alt="fig3_pseudo_hu_decomposition" src="https://github.com/user-attachments/assets/30757fcb-5825-4a10-aa91-67ba58229f41" />
+
+<img width="4583" height="3497" alt="fig9_full_pipeline_walkthrough" src="https://github.com/user-attachments/assets/e5ad47a4-e9d9-419a-a4b7-aea0d2915510" />
+<img width="4395" height="3711" alt="fig8_raw_vs_predicted_4x5" src="https://github.com/user-attachments/assets/4023ce18-7fc5-4ff7-abd3-d7ee3d1e71b9" />
+<img width="3536" height="2742" alt="fig7_qualitative_radiomic_saliency" src="https://github.com/user-attachments/assets/038b401c-7c00-4ad2-a42f-275168653702" />
+<img width="2223" height="1835" alt="fig13_tsne_penultimate_manifold" src="https://github.com/user-attachments/assets/6f869e70-b3ee-4585-a414-3db1117baf9c" />
+<img width="3575" height="1324" alt="fig12_conformal_risk_efficiency" src="https://github.com/user-attachments/assets/422948d0-14bd-4622-a21f-695f501a1311" />
+<img width="4019" height="2287" alt="fig11_radiomic_feature_distributions" src="https://github.com/user-attachments/assets/8cee6c6d-2c4c-421f-be15-fb5c01dfbef1" />
+<img width="4395" height="3711" alt="fig10_roi_contours_4x5" src="https://github.com/user-attachments/assets/30b71352-634d-448c-aa56-f731c66fec0b" />
+
+
+
+
+
+
+
 ## Key Highlights & Contributions
 
 * **Volumetric Slice Data Leakage Audit:** Demonstrates across four architectures (`ResNet50`, `ConvNeXt-V2-Tiny`, `Swin-Tiny`, and `PRISM-Net`) that standard random slice splitting leaks adjacent slices of the same patient across train/validation folds—inflating `ResNet50` accuracy from **$91.05\%$ to $100.00\%$ ($+8.95\%$ inflation)** and MCC from **$0.8717$ to $1.0000$ ($+0.1283$ inflation)**.
