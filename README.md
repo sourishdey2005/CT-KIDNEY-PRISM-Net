@@ -6,7 +6,7 @@
 [![Calibration](https://img.shields.io/badge/Uncertainty-Split%20Conformal%20Prediction-3b9ab2.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-**PRISM-Net** (**P**hysics-Informed **R**adiomic **I**ntegrated **S**patial **M**ulti-Stream **Net**work) is a leakage-audited, uncertainty-calibrated deep learning framework for multi-class renal pathology triage (`Normal`, `Cyst`, `Tumor`, and `Stone`) on non-contrast/contrast-enhanced abdominal CT slices.
+**PRISM-Net** (**P**hysics-Informed **R**adiomic **I**ntegrated **S**patial **M**ulti-Stream **Net**work) is a leakage-audited, uncertainty-calibrated deep learning framework for multi-class renal pathology triage (`Normal`, `Cyst`, `Tumor`, and `Stone`) on non-contrast/contrast-enhanced abdominal CT slices scan.
 
 Unlike conventional 2D CT classifiers that suffer from severe **volumetric slice-level data leakage** (artificially inflating accuracy to $100.00\%$), PRISM-Net enforces strict **pseudo-patient clustering** (`StratifiedGroupKFold` across 427 reconstructed patient studies), couples a **3-channel Pseudo-Hounsfield Unit (Pseudo-HU) physics stem** with a dual-stream **ConvNeXt-V2-Tiny + Swin-Tiny** backbone, extracts **12 differentiable $56 \times 56$ spatial radiomic descriptors** end-to-end, fuses multi-scale tokens via **Radiomic-Neural Cross-Attention (RNCA)**, and provides finite-sample clinical coverage guarantees via **Split Conformal Prediction**.
 
