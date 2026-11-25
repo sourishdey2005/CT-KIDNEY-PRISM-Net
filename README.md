@@ -209,5 +209,3 @@ pip install torch torchvision timm scikit-learn pandas numpy opencv-python matpl
 * **Compute:** Dual NVIDIA Tesla T4 GPUs ($2 \times 15\text{ GB}$ VRAM) via `nn.DataParallel` with Automatic Mixed Precision (`torch.amp.autocast("cuda")`).
 * **Optimization:** `AdamW` ($\text{lr} = 3 \times 10^{-4}$, weight decay $10^{-2}$), linear warmup + Cosine Annealing LR schedule, effective batch size $96$–$128$.
 * **Data Hygiene:** Exact `MD5` deduplication ($12,446 \rightarrow 11,929$ slices) followed by perceptual/geometric pseudo-patient clustering ($427$ studies) and 5-fold `StratifiedGroupKFold`.
-
-```
