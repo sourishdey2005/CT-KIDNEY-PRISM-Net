@@ -64,19 +64,19 @@ From the local `ConvNeXt-V2-Tiny` feature map $\mathbf{F}_{\text{loc}} \in \math
 
 - **First- to Fourth-Order Weighted Moments & Information:**
 
-  ```math
+  $$
   \mu_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}, \quad \sigma_w^2 = \sum_{i,j} W_{i,j}(\tilde{I}_{i,j} - \mu_w)^2, \quad \gamma_1 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^3
-  ```
+  $$
 
-  ```math
+  $$
   \gamma_2 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^4, \quad E_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}^2, \quad H_w = -\sum_{i,j} W_{i,j}\log(W_{i,j} + \epsilon)
-  ```
+  $$
 
 - **Directional Spatial Contrast & Inverse Difference Moment (Homogeneity) across Horizontal ($h$), Vertical ($v$), and Diagonal ($d$) offsets $\Delta_{\delta}\tilde{I}$:**
 
-  ```math
+  $$
   \text{Contrast}_{\delta} = \sum_{i,j} W_{i,j}^{(\delta)} \left(\Delta_{\delta}\tilde{I}_{i,j}\right)^2, \quad \text{Homogeneity}_{\delta} = \sum_{i,j} \frac{W_{i,j}^{(\delta)}}{1 + \left|\Delta_{\delta}\tilde{I}_{i,j}\right|}, \quad \delta \in \{h, v, d\}
-  ```
+  $$
 
   
 ### 4. Radiomic-Neural Cross-Attention (RNCA) & Dual-Stream Fusion
