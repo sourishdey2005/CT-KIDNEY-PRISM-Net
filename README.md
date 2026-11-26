@@ -59,16 +59,18 @@ From raw slice geometry and intensity quantiles, a 4-dimensional acquisition des
 
 $$\text{FiLM}(\mathbf{F}, \mathbf{a}) = \left(\mathbf{1} + \boldsymbol{\gamma}(\mathbf{a})\right) \odot \mathbf{F} + \boldsymbol{\beta}(\mathbf{a}), \quad [\boldsymbol{\gamma}(\mathbf{a}), \boldsymbol{\beta}(\mathbf{a})] = W_2\,\text{GELU}(W_1 \mathbf{a})$$
 
-### 3. Differentiable $56 \times 56$ Radiomic Feature Extractor
+### 3. Differentiable 56 × 56 Radiomic Feature Extractor
 From the local `ConvNeXt-V2-Tiny` feature map $\mathbf{F}_{\text{loc}} \in \mathbb{R}^{C_l \times 56 \times 56}$, a spatial attention head predicts logits $\mathbf{A} \in \mathbb{R}^{1 \times 56 \times 56}$, normalized into a probability mass distribution $\mathbf{W} = \text{softmax}(\text{vec}(\mathbf{A})) \in \Delta^{56 \times 56}$. Downsampling the soft-tissue channel to $\tilde{I} \in \mathbb{R}^{56 \times 56}$, PRISM-Net extracts 12 differentiable radiomic descriptors $\mathbf{r} \in \mathbb{R}^{12}$:
 
-* **First- to Fourth-Order Weighted Moments & Information:**
-  $$\mu_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}, \quad \sigma_w^2 = \sum_{i,j} W_{i,j}(\tilde{I}_{i,j} - \mu_w)^2, \quad \gamma_1 = \sum_{i,j} W_{i,j}\!\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^3$$
-  $$\gamma_2 = \sum_{i,j} W_{i,j}\!\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^4, \quad E_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}^2, \quad H_w = -\sum_{i,j} W_{i,j}\log(W_{i,j} + \epsilon)$$
+- **First- to Fourth-Order Weighted Moments & Information:**
 
-* **Directional Spatial Contrast & Inverse Difference Moment (Homogeneity) across Horizontal ($h$), Vertical ($v$), and Diagonal ($d$) offsets $\Delta_{\delta}\tilde{I}$:**
-  $$\text{Contrast}_{\delta} = \sum_{i,j} W_{i,j}^{(\delta)} \left(\Delta_{\delta}\tilde{I}_{i,j}\right)^2, \quad \text{Homogeneity}_{\delta} = \sum_{i,j} \frac{W_{i,j}^{(\delta)}}{1 + \left\vert{}\Delta_{\delta}\tilde{I}_{i,j}\right\vert{}}, \quad \delta \in \{h, v, d\}$$
+  $$\mu_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}, \quad \sigma_w^2 = \sum_{i,j} W_{i,j}(\tilde{I}_{i,j} - \mu_w)^2, \quad \gamma_1 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^3$$
 
+  $$\gamma_2 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^4, \quad E_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}^2, \quad H_w = -\sum_{i,j} W_{i,j}\log(W_{i,j} + \epsilon)$$
+
+- **Directional Spatial Contrast & Inverse Difference Moment (Homogeneity) across Horizontal ($h$), Vertical ($v$), and Diagonal ($d$) offsets $\Delta_{\delta}\tilde{I}$:**
+
+  $$\text{Contrast}_{\delta} = \sum_{i,j} W_{i,j}^{(\delta)} \left(\Delta_{\delta}\tilde{I}_{i,j}\right)^2, \quad \text{Homogeneity}_{\delta} = \sum_{i,j} \frac{W_{i,j}^{(\delta)}}{1 + \left|\Delta_{\delta}\tilde{I}_{i,j}\right|}, \quad \delta \in \{h, v, d\}$$
 ### 4. Radiomic-Neural Cross-Attention (RNCA) & Dual-Stream Fusion
 The radiomic vector $\mathbf{r} \in \mathbb{R}^{12}$ is projected into a query token $\mathbf{q} = \phi_q(\mathbf{r}) \in \mathbb{R}^{1 \times d}$ ($d = 384$) that attends over concatenated local (`ConvNeXt-V2-Tiny` pooled to $7 \times 7 = 49$ tokens) and global (`Swin-Tiny` $7 \times 7 = 49$ tokens) visual representations $\mathbf{V} \in \mathbb{R}^{98 \times d}$:
 
