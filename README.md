@@ -82,15 +82,15 @@ $$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{LA-Focal}}\!\left(\hat{\mathbf
 where $\boldsymbol{\pi}$ denotes empirical class priors, $\tau$ is the logit-adjustment temperature, and $\mathcal{L}_{\text{SupCon}}$ pulls same-phenotype embeddings together across patient studies.
 
 ### 6. Finite-Sample Split Conformal Prediction
-For risk tolerance $\alpha \in (0, 1)$, non-conformity scores $s_i = 1 - \hat{P}(Y = y_i \mid X_i)$ are evaluated on a held-out calibration partition $\mathcal{D}_{\text{cal}}$ of size $n_{\text{cal}}$. Defining the empirical quantile threshold:
+For risk tolerance $\alpha \in (0, 1)$, non-conformity scores $s_i = 1 - \hat{P}(Y = y_i \mid X_i)$ are evaluated on a held-out calibration partition $\mathcal{D}\_{\text{cal}}$ of size $n\_{\text{cal}}$. Defining the empirical quantile threshold:
 
-$$\hat{q}_{1-\alpha} = \text{Quantile}\!\left(\{s_i\}_{i \in \mathcal{D}_{\text{cal}}},\; \frac{\lceil (n_{\text{cal}} + 1)(1 - \alpha) \rceil}{n_{\text{cal}}}\right)$$
+$$\hat{q}_{1-\alpha} = \text{Quantile}\left(\lbrace s_i \rbrace_{i \in \mathcal{D}_{\text{cal}}},\; \frac{\lceil (n_{\text{cal}} + 1)(1 - \alpha) \rceil}{n_{\text{cal}}}\right)$$
 
-the prediction set for an unseen patient scan $X_{\text{test}}$ satisfies the finite-sample marginal coverage guarantee $\mathbb{P}\!\left(Y_{\text{test}} \in \mathcal{C}(X_{\text{test}})\right) \ge 1 - \alpha$:
+the prediction set for an unseen patient scan $X_{\text{test}}$ satisfies the finite-sample marginal coverage guarantee $\mathbb{P}\left(Y_{\text{test}} \in \mathcal{C}(X_{\text{test}})\right) \ge 1 - \alpha$:
 
-$$\mathcal{C}(X_{\text{test}}) = \left\{ c \in \{1, \dots, 4\} : 1 - \hat{P}(Y = c \mid X_{\text{test}}) \le \hat{q}_{1-\alpha} \right\}$$
+$$\mathcal{C}(X_{\text{test}}) = \lbrace c \in \lbrace 1, \dots, 4 \rbrace : 1 - \hat{P}(Y = c \mid X_{\text{test}}) \le \hat{q}_{1-\alpha} \rbrace$$
 
----
+
 
 ## Dataset Integrity & Pseudo-Patient Clustering Audit
 
