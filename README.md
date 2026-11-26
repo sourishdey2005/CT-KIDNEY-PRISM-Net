@@ -1,16 +1,3 @@
-Looking at your latest screenshot (`image_370374.png`), GitHub's Markdown parser has a known bug when `$$ ... $$` is placed **inside an indented bullet list (`- `)**:
-
-1. Even when `$$` is on its own line, GitHub's CommonMark parser parses indented blocks inside lists *before* MathJax runs—so pairs of underscores like `\sum_{i,j}` and `\tilde{I}_{i,j}` get eaten as *italics* (`\sum{i,j}` and `\tilde{I}{i,j}`), and `$$` gets collapsed back onto the same line!
-2. Notice how Sections **1, 2, 4, 5, and 6** in your README render perfectly because their `$$ ... $$` equations are **at the root indentation level (not inside bullet points)**!
-
-### Two Fixes Applied to Your Full README
-
-1. **Un-indented Section 3's equations out of bullet points** (using bold sub-labels instead of `- ` bullets), matching Sections 1, 2, 4, 5, and 6 so GitHub renders every single symbol cleanly without eating underscores.
-2. **Fixed the broken vertical bars in Table 4B** (`$\vert{}\mathcal{C}(X)\vert{}$` $\rightarrow$ `$|\mathcal{C}(X)|$`, which otherwise breaks Markdown table column pipes `|`).
-
-Here is your complete, fixed `README.md` ready to copy and paste directly:
-
-```markdown
 # PRISM-Net: Physics-Informed Radiomic-Neural Cross-Attention Network for Leakage-Free Renal CT Phenotyping
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg?logo=pytorch)](https://pytorch.org/)
