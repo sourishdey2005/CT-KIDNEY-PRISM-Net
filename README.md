@@ -1,3 +1,16 @@
+Looking at your latest screenshot (`image_370374.png`), GitHub's Markdown parser has a known bug when `$$ ... $$` is placed **inside an indented bullet list (`- `)**:
+
+1. Even when `$$` is on its own line, GitHub's CommonMark parser parses indented blocks inside lists *before* MathJax runs—so pairs of underscores like `\sum_{i,j}` and `\tilde{I}_{i,j}` get eaten as *italics* (`\sum{i,j}` and `\tilde{I}{i,j}`), and `$$` gets collapsed back onto the same line!
+2. Notice how Sections **1, 2, 4, 5, and 6** in your README render perfectly because their `$$ ... $$` equations are **at the root indentation level (not inside bullet points)**!
+
+### Two Fixes Applied to Your Full README
+
+1. **Un-indented Section 3's equations out of bullet points** (using bold sub-labels instead of `- ` bullets), matching Sections 1, 2, 4, 5, and 6 so GitHub renders every single symbol cleanly without eating underscores.
+2. **Fixed the broken vertical bars in Table 4B** (`$\vert{}\mathcal{C}(X)\vert{}$` $\rightarrow$ `$|\mathcal{C}(X)|$`, which otherwise breaks Markdown table column pipes `|`).
+
+Here is your complete, fixed `README.md` ready to copy and paste directly:
+
+```markdown
 # PRISM-Net: Physics-Informed Radiomic-Neural Cross-Attention Network for Leakage-Free Renal CT Phenotyping
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg?logo=pytorch)](https://pytorch.org/)
@@ -6,12 +19,11 @@
 [![Calibration](https://img.shields.io/badge/Uncertainty-Split%20Conformal%20Prediction-3b9ab2.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
-**PRISM-Net** (**P**hysics-Informed **R**adiomic **I**ntegrated **S**patial **M**ulti-Stream **Net**work) is a leakage-audited, uncertainty-calibrated deep learning framework for multi-class renal pathology triage (`Normal`, `Cyst`, `Tumor`, and `Stone`) on non-contrast/contrast-enhanced abdominal CT slices scan.
+**PRISM-Net** (**P**hysics-Informed **R**adiomic **I**ntegrated **S**patial **M**ulti-Stream **Net**work) is a leakage-audited, uncertainty-calibrated deep learning framework for multi-class renal pathology triage (`Normal`, `Cyst`, `Tumor`, and `Stone`) on non-contrast/contrast-enhanced abdominal CT slices.
 
 Unlike conventional 2D CT classifiers that suffer from severe **volumetric slice-level data leakage** (artificially inflating accuracy to $100.00\%$), PRISM-Net enforces strict **pseudo-patient clustering** (`StratifiedGroupKFold` across 427 reconstructed patient studies), couples a **3-channel Pseudo-Hounsfield Unit (Pseudo-HU) physics stem** with a dual-stream **ConvNeXt-V2-Tiny + Swin-Tiny** backbone, extracts **12 differentiable $56 \times 56$ spatial radiomic descriptors** end-to-end, fuses multi-scale tokens via **Radiomic-Neural Cross-Attention (RNCA)**, and provides finite-sample clinical coverage guarantees via **Split Conformal Prediction**.
 
 ---
-
 
 <img width="1600" height="838" alt="fig1_leakage_audit" src="https://github.com/user-attachments/assets/50ec78ae-7cf1-4073-acca-5663ea3508bd" />
 <img width="3873" height="2676" alt="fig1_raw_eda_statistics" src="https://github.com/user-attachments/assets/dcc1ab8d-eee2-47f1-b760-b24ebe645151" />
@@ -19,7 +31,7 @@ Unlike conventional 2D CT classifiers that suffer from severe **volumetric slice
 <img width="2826" height="1291" alt="fig3_ablation_trajectory" src="https://github.com/user-attachments/assets/2eee8a1b-fc9e-4fdf-ae9d-c61185cd19b1" />
 <img width="3721" height="1324" alt="fig2_sota_benchmark" src="https://github.com/user-attachments/assets/6bffb622-66e4-493d-8a30-b82d2a998759" />
 <img width="3570" height="1354" alt="fig6_roc_pr_curves" src="https://github.com/user-attachments/assets/aae31e31-e5ee-4622-b340-b0bb90ccc3e0" />
-<img width="4753" height="1414" alt="fig4_prism_evaluation_dashboard" src="https://github.com/user-attachments/assets/c2de9bd5-9835-47b8-a7f0-b910607363dd" />
+<img width="4753" height="1414" alt="fig4_prism_evaluation_dashboard" src="https://github.com/user-attachments/assets/c2de9bd5-9835-419a-a4b7-aea0d2915510" />
 <img width="3466" height="1355" alt="fig4_calibration_confusion" src="https://github.com/user-attachments/assets/16b6bee4-76d1-4416-b850-1cc1f73edcce" />
 <img width="3247" height="3348" alt="fig3_pseudo_hu_decomposition" src="https://github.com/user-attachments/assets/30757fcb-5825-4a10-aa91-67ba58229f41" />
 
@@ -31,19 +43,15 @@ Unlike conventional 2D CT classifiers that suffer from severe **volumetric slice
 <img width="4019" height="2287" alt="fig11_radiomic_feature_distributions" src="https://github.com/user-attachments/assets/8cee6c6d-2c4c-421f-be15-fb5c01dfbef1" />
 <img width="4395" height="3711" alt="fig10_roi_contours_4x5" src="https://github.com/user-attachments/assets/30b71352-634d-448c-aa56-f731c66fec0b" />
 
-
-
-
-
-
+---
 
 ## Key Highlights & Contributions
 
-* **Volumetric Slice Data Leakage Audit:** Demonstrates across four architectures (`ResNet50`, `ConvNeXt-V2-Tiny`, `Swin-Tiny`, and `PRISM-Net`) that standard random slice splitting leaks adjacent slices of the same patient across train/validation folds—inflating `ResNet50` accuracy from **$91.05\%$ to $100.00\%$ ($+8.95\%$ inflation)** and MCC from **$0.8717$ to $1.0000$ ($+0.1283$ inflation)**.
-* **Physics-Informed Pseudo-HU Decomposition:** Transforms single-channel grayscale CT intensities into three window-level attenuation representations (Soft-Tissue, Corticomedullary/Nephrographic Contrast, and Bone/Calculus) prior to dual-stream feature encoding.
-* **Blind Acquisition FiLM Conditioning:** Modulates local and global feature maps using Feature-wise Linear Modulation ($\text{FiLM}$) driven by slice-level geometric and intensity acquisition descriptors without requiring DICOM metadata headers.
-* **Differentiable $56 \times 56$ Radiomics & Cross-Attention (RNCA):** Computes 12 closed-form, differentiable statistical and directional GLCM texture descriptors weighted by a learned $56 \times 56$ spatial attention map, querying multi-scale visual tokens via multi-head cross-attention.
-* **Calibrated Clinical Safety Guarantees:** Achieves **$96.63\%$ accuracy**, **$0.9518$ MCC**, **$0.9968$ Macro-AUROC**, **$93.91\%$ Malignant Tumor Sensitivity at $99\%$ Specificity**, and **$0.0322$ ECE** across all $11,929$ out-of-fold slices, with **Split Conformal Prediction** delivering **$95.09\%$ empirical coverage** ($97.15\%$ singleton predictions at $97.49\%$ singleton accuracy) at target $\alpha = 0.05$.
+- **Volumetric Slice Data Leakage Audit:** Demonstrates across four architectures (`ResNet50`, `ConvNeXt-V2-Tiny`, `Swin-Tiny`, and `PRISM-Net`) that standard random slice splitting leaks adjacent slices of the same patient across train/validation folds—inflating `ResNet50` accuracy from **$91.05\%$ to $100.00\%$ ($+8.95\%$ inflation)** and MCC from **$0.8717$ to $1.0000$ ($+0.1283$ inflation)**.
+- **Physics-Informed Pseudo-HU Decomposition:** Transforms single-channel grayscale CT intensities into three window-level attenuation representations (Soft-Tissue, Corticomedullary/Nephrographic Contrast, and Bone/Calculus) prior to dual-stream feature encoding.
+- **Blind Acquisition FiLM Conditioning:** Modulates local and global feature maps using Feature-wise Linear Modulation ($\text{FiLM}$) driven by slice-level geometric and intensity acquisition descriptors without requiring DICOM metadata headers.
+- **Differentiable $56 \times 56$ Radiomics & Cross-Attention (RNCA):** Computes 12 closed-form, differentiable statistical and directional GLCM texture descriptors weighted by a learned $56 \times 56$ spatial attention map, querying multi-scale visual tokens via multi-head cross-attention.
+- **Calibrated Clinical Safety Guarantees:** Achieves **$96.63\%$ accuracy**, **$0.9518$ MCC**, **$0.9968$ Macro-AUROC**, **$93.91\%$ Malignant Tumor Sensitivity at $99\%$ Specificity**, and **$0.0322$ ECE** across all $11,929$ out-of-fold slices, with **Split Conformal Prediction** delivering **$95.09\%$ empirical coverage** ($97.15\%$ singleton predictions at $97.49\%$ singleton accuracy) at target $\alpha = 0.05$.
 
 ---
 
@@ -62,29 +70,22 @@ $$\text{FiLM}(\mathbf{F}, \mathbf{a}) = \left(\mathbf{1} + \boldsymbol{\gamma}(\
 ### 3. Differentiable 56 × 56 Radiomic Feature Extractor
 From the local `ConvNeXt-V2-Tiny` feature map $\mathbf{F}_{\text{loc}} \in \mathbb{R}^{C_l \times 56 \times 56}$, a spatial attention head predicts logits $\mathbf{A} \in \mathbb{R}^{1 \times 56 \times 56}$, normalized into a probability mass distribution $\mathbf{W} = \text{softmax}(\text{vec}(\mathbf{A})) \in \Delta^{56 \times 56}$. Downsampling the soft-tissue channel to $\tilde{I} \in \mathbb{R}^{56 \times 56}$, PRISM-Net extracts 12 differentiable radiomic descriptors $\mathbf{r} \in \mathbb{R}^{12}$:
 
-- **First- to Fourth-Order Weighted Moments & Information:**
+**First- to Fourth-Order Weighted Moments & Information:**
 
-  $$
-  \mu_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}, \quad \sigma_w^2 = \sum_{i,j} W_{i,j}(\tilde{I}_{i,j} - \mu_w)^2, \quad \gamma_1 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^3
-  $$
+$$\mu_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}, \quad \sigma_w^2 = \sum_{i,j} W_{i,j}(\tilde{I}_{i,j} - \mu_w)^2, \quad \gamma_1 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^3$$
 
-  $$
-  \gamma_2 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^4, \quad E_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}^2, \quad H_w = -\sum_{i,j} W_{i,j}\log(W_{i,j} + \epsilon)
-  $$
+$$\gamma_2 = \sum_{i,j} W_{i,j}\left(\frac{\tilde{I}_{i,j}-\mu_w}{\sqrt{\sigma_w^2 + \epsilon}}\right)^4, \quad E_w = \sum_{i,j} W_{i,j}\tilde{I}_{i,j}^2, \quad H_w = -\sum_{i,j} W_{i,j}\log(W_{i,j} + \epsilon)$$
 
-- **Directional Spatial Contrast & Inverse Difference Moment (Homogeneity) across Horizontal ($h$), Vertical ($v$), and Diagonal ($d$) offsets $\Delta_{\delta}\tilde{I}$:**
+**Directional Spatial Contrast & Inverse Difference Moment (Homogeneity)** across Horizontal ($h$), Vertical ($v$), and Diagonal ($d$) offsets $\Delta_{\delta}\tilde{I}$:
 
-  $$
-  \text{Contrast}_{\delta} = \sum_{i,j} W_{i,j}^{(\delta)} \left(\Delta_{\delta}\tilde{I}_{i,j}\right)^2, \quad \text{Homogeneity}_{\delta} = \sum_{i,j} \frac{W_{i,j}^{(\delta)}}{1 + \left|\Delta_{\delta}\tilde{I}_{i,j}\right|}, \quad \delta \in \{h, v, d\}
-  $$
+$$\text{Contrast}_{\delta} = \sum_{i,j} W_{i,j}^{(\delta)} \left(\Delta_{\delta}\tilde{I}_{i,j}\right)^2, \quad \text{Homogeneity}_{\delta} = \sum_{i,j} \frac{W_{i,j}^{(\delta)}}{1 + \left\vert{}\Delta_{\delta}\tilde{I}_{i,j}\right\vert{}}, \quad \delta \in \{h, v, d\}$$
 
-  
 ### 4. Radiomic-Neural Cross-Attention (RNCA) & Dual-Stream Fusion
 The radiomic vector $\mathbf{r} \in \mathbb{R}^{12}$ is projected into a query token $\mathbf{q} = \phi_q(\mathbf{r}) \in \mathbb{R}^{1 \times d}$ ($d = 384$) that attends over concatenated local (`ConvNeXt-V2-Tiny` pooled to $7 \times 7 = 49$ tokens) and global (`Swin-Tiny` $7 \times 7 = 49$ tokens) visual representations $\mathbf{V} \in \mathbb{R}^{98 \times d}$:
 
 $$\mathbf{z}_{\text{RNCA}} = \text{LayerNorm}\!\left(\mathbf{q} + \text{MHA}(\mathbf{q}W_Q,\; \mathbf{V}W_K,\; \mathbf{V}W_V)\right) + \mathbf{g}_{\text{global}}$$
 
-The final representation $\mathbf{z} = [\text{GAP}(\mathbf{F}_{\text{loc}}) \,\Vert{}\, \mathbf{z}_{\text{RNCA}}] \in \mathbb{R}^{C_l + 384}$ feeds both a Supervised Contrastive projection head $\mathbf{p} = \text{normalize}(g_{\text{supcon}}(\mathbf{z})) \in \mathbb{S}^{127}$ and the classification head $\hat{\mathbf{y}} = W_{\text{cls}}\text{Dropout}(\text{LayerNorm}(\mathbf{z}))$.
+The final representation $\mathbf{z} = [\text{GAP}(\mathbf{F}_{\text{loc}}) \,\Vert\, \mathbf{z}_{\text{RNCA}}] \in \mathbb{R}^{C_l + 384}$ feeds both a Supervised Contrastive projection head $\mathbf{p} = \text{normalize}(g_{\text{supcon}}(\mathbf{z})) \in \mathbb{S}^{127}$ and the classification head $\hat{\mathbf{y}} = W_{\text{cls}}\text{Dropout}(\text{LayerNorm}(\mathbf{z}))$.
 
 ### 5. Composite Logit-Adjusted Focal + Supervised Contrastive Objective
 To counter class imbalance (`Normal` $40.79\%$ vs. `Stone` $11.06\%$) while enforcing tight intra-class manifold clustering:
@@ -100,9 +101,7 @@ $$\hat{q}_{1-\alpha} = \text{Quantile}\!\left(\{s_i\}_{i \in \mathcal{D}_{\text{
 
 the prediction set for an unseen patient scan $X_{\text{test}}$ satisfies the finite-sample marginal coverage guarantee $\mathbb{P}\!\left(Y_{\text{test}} \in \mathcal{C}(X_{\text{test}})\right) \ge 1 - \alpha$:
 
-$$
-\mathcal{C}(X_{\text{test}}) = \lbrace c \in \lbrace 1, \dots, 4 \rbrace : 1 - \hat{P}(Y = c \mid X_{\text{test}}) \le \hat{q}_{1-\alpha} \rbrace
-$$
+$$\mathcal{C}(X_{\text{test}}) = \left\{ c \in \{1, \dots, 4\} : 1 - \hat{P}(Y = c \mid X_{\text{test}}) \le \hat{q}_{1-\alpha} \right\}$$
 
 ---
 
@@ -131,7 +130,7 @@ A comprehensive cryptographic (`MD5`), geometric, and intensity audit was execut
 ### 5-Fold `StratifiedGroupKFold` Partition Distribution ($N = 11,929$ Slices / $427$ Studies)
 
 | Fold | Cyst Slices (Studies) | Normal Slices (Studies) | Stone Slices (Studies) | Tumor Slices (Studies) | Total Fold Slices |
-| :---: | :---: | :---: | :---: | :---: | :---: |
+| :--- | :---: | :---: | :---: | :---: | :---: |
 | **Fold 0** | 655 (24) | 1,001 (30) | 273 (13) | 457 (18) | **2,386** |
 | **Fold 1** | 656 (24) | 1,000 (30) | 271 (10) | 458 (19) | **2,385** |
 | **Fold 2** | 656 (24) | 1,001 (30) | 270 (12) | 457 (19) | **2,384** |
@@ -180,9 +179,9 @@ Evaluating identical architectures under a standard random slice split versus pa
 | **M4: Full PRISM-Net (+ LA-Focal & SupCon Loss)** | 96.61 | 95.75 | 0.9515 | 0.9869 | **97.48** | 0.0275 |
 
 **Key Ablation Takeaways:**
-* Adding **Blind View/Phase FiLM Conditioning (`M2`)** reduces Expected Calibration Error by **$33.2\%$** ($0.0247 \rightarrow 0.0165$) while boosting MCC to $0.9575$.
-* Integrating **Differentiable Radiomic Cross-Attention (`M3`)** achieves peak discrimination across the ablation ladder (**$97.46\%$ Accuracy**, **$96.76\%$ Macro-F1**, **$0.9637$ MCC**, and **$0.0163$ ECE**).
-* Incorporating **Logit-Adjusted Focal + SupCon Loss (`M4`)** maximizes high-specificity clinical triage sensitivity for malignant tumors (**$97.48\%$ Tumor Sensitivity at $99\%$ Specificity**).
+- Adding **Blind View/Phase FiLM Conditioning (`M2`)** reduces Expected Calibration Error by **$33.2\%$** ($0.0247 \rightarrow 0.0165$) while boosting MCC to $0.9575$.
+- Integrating **Differentiable Radiomic Cross-Attention (`M3`)** achieves peak discrimination across the ablation ladder (**$97.46\%$ Accuracy**, **$96.76\%$ Macro-F1**, **$0.9637$ MCC**, and **$0.0163$ ECE**).
+- Incorporating **Logit-Adjusted Focal + SupCon Loss (`M4`)** maximizes high-specificity clinical triage sensitivity for malignant tumors (**$97.48\%$ Tumor Sensitivity at $99\%$ Specificity**).
 
 ### Table 4B: Split Conformal Prediction Clinical Safety Guarantees (5-Fold OOF, $N = 11,929$)
 
